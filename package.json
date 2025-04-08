@@ -1,0 +1,52 @@
+{
+  "name": "powerbase",
+  "version": "1.0.0",
+  "description": "Powerbase CLI",
+  "repository": "@skorpland/cli",
+  "homepage": "https://powerbase.club/docs/reference/cli",
+  "bugs": "https://github.com/skorpland/cli/issues",
+  "license": "MIT",
+  "author": "Powerbase",
+  "type": "module",
+  "engines": {
+    "npm": ">=8"
+  },
+  "files": [
+    "scripts"
+  ],
+  "scripts": {
+    "postinstall": "node scripts/postinstall.js"
+  },
+  "bin": {
+    "powerbase": "bin/powerbase"
+  },
+  "dependencies": {
+    "bin-links": "^5.0.0",
+    "https-proxy-agent": "^7.0.2",
+    "node-fetch": "^3.3.2",
+    "tar": "7.4.3"
+  }, 
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/skorpland/powerbase.git"
+  },
+  "release": {
+    "branches": [
+      {
+        "name": "+([0-9])?(.{+([0-9]),x}).x",
+        "channel": "hotfix"
+      },
+      {
+        "name": "develop",
+        "channel": "beta"
+      }
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/git"
+    ]
+  }
+}

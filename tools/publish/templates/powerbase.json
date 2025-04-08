@@ -1,0 +1,22 @@
+{
+    "version": "{{ .Version }}",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/skorpland/cli/releases/download/v{{ .Version }}/powerbase_windows_amd64.tar.gz",
+            "bin": [
+                "powerbase.exe"
+            ],
+            "hash": "{{ .Checksum.powerbase_windows_amd64 }}"
+        },
+        "arm64": {
+            "url": "https://github.com/skorpland/cli/releases/download/v{{ .Version }}/powerbase_windows_arm64.tar.gz",
+            "bin": [
+                "powerbase.exe"
+            ],
+            "hash": "{{ .Checksum.powerbase_windows_arm64 }}"
+        }
+    },
+    "homepage": "https://powerbase.club",
+    "license": "MIT",
+    "description": "{{ .Description }}"
+}

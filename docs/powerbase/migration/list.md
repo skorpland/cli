@@ -1,0 +1,11 @@
+## powerbase-migration-list
+
+Lists migration history in both local and remote databases.
+
+Requires your local project to be linked to a remote database by running `powerbase link`. For self-hosted databases, you can pass in the connection parameters using `--db-url` flag.
+
+> Note that URL strings must be escaped according to [RFC 3986](https://www.rfc-editor.org/rfc/rfc3986).
+
+Local migrations are stored in `powerbase/migrations` directory while remote migrations are tracked in `powerbase_migrations.schema_migrations` table. Only the timestamps are compared to identify any differences.
+
+In case of discrepancies between the local and remote migration history, you can resolve them using the `migration repair` command.

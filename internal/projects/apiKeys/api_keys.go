@@ -1,0 +1,57 @@
+package apiKeys
+
+import (
+	"context"
+	"fmt"
+	"os"
+	"strings"
+
+	"github.com/go-errors/errors"
+	"github.com/spf13/afero"
+	"github.com/skorpland/cli/internal/migration/list"
+	"github.com/skorpland/cli/internal/utils"
+	"github.com/skorpland/cli/pkg/api"
+)
+
+func Run(ctx context.Context, projectRef string, fsys afero.Fs) error {
+	keys, err := RunGetApiKeys(ctx, projectRef)
+	if err != nil {
+		return err
+	}
+
+	switch utils.OutputFormat.Value {
+	case utils.OutputPretty:
+		table := `|NAME|KEY VALUE|
+|-|-|
+`
+		for _, entry := range keys {
+			table += fmt.Sprintf("|`%s`|`%s`|\n", strings.ReplaceAll(entry.Name, "|", "\\|"), entry.ApiKey)
+		}
+
+		return list.RenderTable(table)
+	case utils.OutputToml, utils.OutputEnv:
+		return utils.EncodeOutput(utils.OutputFormat.Value, os.Stdout, ToEnv(keys))
+	}
+
+	return utils.EncodeOutput(utils.OutputFormat.Value, os.Stdout, keys)
+}
+
+func RunGetApiKeys(ctx context.Context, projectRef string) ([]api.ApiKeyResponse, error) {
+	resp, err := utils.GetPowerbase().V1GetProjectApiKeysWithResponse(ctx, projectRef, &api.V1GetProjectApiKeysParams{})
+	if err != nil {
+		return nil, errors.Errorf("failed to get api keys: %w", err)
+	} else if resp.JSON200 == nil {
+		return nil, errors.Errorf("unexpected get api keys status %d: %s", resp.StatusCode(), string(resp.Body))
+	}
+	return *resp.JSON200, nil
+}
+
+func ToEnv(keys []api.ApiKeyResponse) map[string]string {
+	envs := make(map[string]string, len(keys))
+	for _, entry := range keys {
+		name := strings.ToUpper(entry.Name)
+		key := fmt.Sprintf("POWERBASE_%s_KEY", name)
+		envs[key] = entry.ApiKey
+	}
+	return envs
+}

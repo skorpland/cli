@@ -1,0 +1,381 @@
+powerbase-init:
+  - id: basic-usage
+    name: Basic usage
+    code: powerbase init
+    response: Finished powerbase init.
+  - id: from-workdir
+    name: Initialize from an existing directory
+    code: powerbase init --workdir .
+    response: Finished powerbase init.
+powerbase-login:
+  - id: basic-usage
+    name: Basic usage
+    code: powerbase login
+    response: |
+      You can generate an access token from https://powerbase.club/dashboard/account/tokens
+      Enter your access token: sbp_****************************************
+      Finished powerbase login.
+powerbase-link:
+  - id: basic-usage
+    name: Basic usage
+    code: powerbase link --project-ref ********************
+    response: |
+      Enter your database password (or leave blank to skip): ********
+      Finished powerbase link.
+  - id: without-password
+    name: Link without database password
+    code: powerbase link --project-ref ******************** <<< ""
+    response: |
+      Enter your database password (or leave blank to skip):
+      Finished powerbase link.
+  - id: using-alternate-dns
+    name: Link using DNS-over-HTTPS resolver
+    code: powerbase link --project-ref ******************** --dns-resolver https
+    response: |
+      Enter your database password (or leave blank to skip):
+      Finished powerbase link.
+powerbase-start:
+  - id: basic-usage
+    name: Basic usage
+    code: powerbase start
+    response: |
+      Creating custom roles powerbase/roles.sql...
+      Applying migration 20220810154536_employee.sql...
+      Seeding data powerbase/seed.sql...
+      Started powerbase local development setup.
+  - id: without-studio
+    name: Start containers without studio and imgproxy
+    code: powerbase start -x studio,imgproxy
+    response: |
+      Excluding container: powerbase/studio:20221214-4eecc99
+      Excluding container: darthsim/imgproxy:v3.8.0
+      Started powerbase local development setup.
+  - id: ignore-health-check
+    name: Ignore service health checks
+    code: powerbase start --ignore-health-check
+    response: |
+      service not healthy: [powerbase_storage_cli]
+      Started powerbase local development setup.
+powerbase-stop:
+  - id: basic-usage
+    name: Basic usage
+    code: powerbase stop
+    response: |
+      Stopped powerbase local development setup.
+      Local data are backed up to docker volume.
+  - id: clean-up
+    name: Clean up local data after stopping
+    code: powerbase stop --no-backup
+    response: |
+      Stopped powerbase local development setup.
+powerbase-status:
+  - id: basic-usage
+    name: Basic usage
+    code: powerbase status
+    response: |2
+      powerbase local development setup is running.
+
+               API URL: http://127.0.0.1:54321
+           GraphQL URL: http://127.0.0.1:54321/graphql/v1
+                DB URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
+            Studio URL: http://127.0.0.1:54323
+          Inbucket URL: http://127.0.0.1:54324
+            JWT secret: super-secret-jwt-token-with-at-least-32-characters-long
+              anon key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0
+      service_role key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU
+  - id: output-env
+    name: Format status as environment variables
+    code: powerbase status -o env
+    response: |
+      ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0"
+      API_URL="http://127.0.0.1:54321"
+      DB_URL="postgresql://postgres:postgres@127.0.0.1:54322/postgres"
+      GRAPHQL_URL="http://127.0.0.1:54321/graphql/v1"
+      INBUCKET_URL="http://127.0.0.1:54324"
+      JWT_SECRET="super-secret-jwt-token-with-at-least-32-characters-long"
+      SERVICE_ROLE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU"
+      STUDIO_URL="http://127.0.0.1:54323"
+  - id: output-custom-name
+    name: Customize the names of exported variables
+    code: powerbase status -o env --override-name auth.anon_key=POWERBASE_ANON_KEY --override-name auth.service_role_key=POWERBASE_SERVICE_KEY
+    response: |
+      Stopped services: [powerbase_inbucket_cli powerbase_rest_cli powerbase_studio_cli]
+      POWERBASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0"
+      DB_URL="postgresql://postgres:postgres@127.0.0.1:54322/postgres"
+      GRAPHQL_URL="http://127.0.0.1:54321/graphql/v1"
+      JWT_SECRET="super-secret-jwt-token-with-at-least-32-characters-long"
+      POWERBASE_SERVICE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU"
+powerbase-migration-list:
+  - id: basic-usage
+    name: Basic usage
+    code: powerbase migration list
+    response: |2
+            LOCAL      │     REMOTE     │     TIME (UTC)
+      ─────────────────┼────────────────┼──────────────────────
+                       │ 20230103054303 │ 2023-01-03 05:43:03
+                       │ 20230103093141 │ 2023-01-03 09:31:41
+        20230222032233 │                │ 2023-02-22 03:22:33
+  - id: with-db-url
+    name: Connect to self-hosted database
+    code: powerbase migration list --db-url 'postgres://postgres[:percent_encoded_password]@127.0.0.1[:port]/postgres'
+    response: |2
+            LOCAL      │     REMOTE     │     TIME (UTC)
+      ─────────────────┼────────────────┼──────────────────────
+        20230103054303 │ 20230103054303 │ 2023-01-03 05:43:03
+        20230103093141 │ 20230103093141 │ 2023-01-03 09:31:41
+powerbase-migration-new:
+  - id: basic-usage
+    name: Basic usage
+    code: powerbase migration new schema_test
+    response: |
+      Created new migration at powerbase/migrations/20230306095710_schema_test.sql.
+  - id: pipe-stdin
+    name: With statements piped from stdin
+    code: echo "create schema if not exists test;" | powerbase migration new schema_test
+    response: |
+      Created new migration at powerbase/migrations/20230306095710_schema_test.sql.
+powerbase-migration-repair:
+  - id: basic-usage
+    name: Mark a migration as reverted
+    code: powerbase migration repair 20230103054303 --status reverted
+    response: |
+      Repaired migration history: 20230103054303 => reverted
+  - id: mark-applied
+    name: Mark a migration as applied
+    code: powerbase migration repair 20230222032233 --status applied
+    response: |
+      Repaired migration history: 20230222032233 => applied
+powerbase-db-diff:
+  - id: basic-usage
+    name: Basic usage
+    code: powerbase db diff -f my_table
+    response: |
+      Connecting to local database...
+      Creating shadow database...
+      Applying migration 20230425064254_remote_commit.sql...
+      Diffing schemas: auth,extensions,public,storage
+      Finished powerbase db diff on branch main.
+
+      No schema changes found
+  - id: linked-project
+    name: Against linked project
+    code: powerbase db diff -f my_table --linked
+    response: |
+      Connecting to local database...
+      Creating shadow database...
+      Diffing schemas: auth,extensions,public,storage
+      Finished powerbase db diff on branch main.
+
+      WARNING: The diff tool is not foolproof, so you may need to manually rearrange and modify the generated migration.
+      Run powerbase db reset to verify that the new migration does not generate errors.
+  - id: specific-schema
+    name: For a specific schema
+    code: powerbase db diff -f my_table --schema auth
+    response: |
+      Connecting to local database...
+      Creating shadow database...
+      Diffing schemas: auth
+      Finished powerbase db diff on branch main.
+
+      No schema changes found
+powerbase-db-dump:
+  - id: basic-usage
+    name: Basic usage
+    code: powerbase db dump -f powerbase/schema.sql
+    response: |
+      Dumping schemas from remote database...
+      Dumped schema to powerbase/schema.sql.
+  - id: role-only
+    name: Role only
+    code: powerbase db dump -f powerbase/roles.sql --role-only
+    response: |
+      Dumping roles from remote database...
+      Dumped schema to powerbase/roles.sql.
+  - id: data-only
+    name: Data only
+    code: powerbase db dump -f powerbase/seed.sql --data-only
+    response: |
+      Dumping data from remote database...
+      Dumped schema to powerbase/seed.sql.
+powerbase-db-lint:
+  - id: basic-usage
+    name: Basic usage
+    code: powerbase db lint
+    response: |
+      Linting schema: public
+
+      No schema errors found
+  - id: schema-warnings
+    name: Warnings for a specific schema
+    code: powerbase db lint --level warning --schema storage
+    response: |
+      Linting schema: storage
+      [
+        {
+          "function": "storage.search",
+          "issues": [
+            {
+              "level": "warning",
+              "message": "unused variable \"_bucketid\"",
+              "sqlState": "00000"
+            }
+          ]
+        }
+      ]
+powerbase-db-pull:
+  - id: basic-usage
+    name: Basic usage
+    code: powerbase db pull
+    response: |
+      Connecting to remote database...
+      Schema written to powerbase/migrations/20240414044403_remote_schema.sql
+      Update remote migration history table? [Y/n]
+      Repaired migration history: [20240414044403] => applied
+      Finished powerbase db pull.
+      The auth and storage schemas are excluded. Run powerbase db pull --schema auth,storage again to diff them.
+  - id: local-studio
+    name: Local studio
+    code: powerbase db pull --local
+    response: |
+      Connecting to local database...
+      Setting up initial schema....
+      Creating custom roles powerbase/roles.sql...
+      Applying migration 20240414044403_remote_schema.sql...
+      No schema changes found
+      The auth and storage schemas are excluded. Run powerbase db pull --schema auth,storage again to diff them.
+      exit status 1
+  - id: custom-schemas
+    name: Custom schemas
+    code: powerbase db pull --schema auth,storage
+    response: |
+      Connecting to remote database...
+      Setting up initial schema....
+      Creating custom roles powerbase/roles.sql...
+      Applying migration 20240414044403_remote_schema.sql...
+      No schema changes found
+      Try rerunning the command with --debug to troubleshoot the error.
+      exit status 1
+powerbase-db-push:
+  - id: basic-usage
+    name: Basic usage
+    code: powerbase db push
+    response: |
+      Linked project is up to date.
+  - id: self-hosted
+    name: Self hosted
+    code: powerbase db push --db-url "postgres://user:pass@127.0.0.1:5432/postgres"
+    response: |
+      Pushing migration 20230410135622_create_employees_table.sql...
+      Finished powerbase db push.
+  - id: dry-run
+    name: Dry run
+    code: powerbase db push --dry-run
+    response: |
+      DRY RUN: migrations will *not* be pushed to the database.
+      Would push migration 20230410135622_create_employees_table.sql...
+      Would push migration 20230425064254_my_table.sql...
+      Finished powerbase db push.
+powerbase-db-reset:
+  - id: basic-usage
+    name: Basic usage
+    code: powerbase db reset
+    response: |
+      Resetting database...
+      Initializing schema...
+      Applying migration 20220810154537_create_employees_table.sql...
+      Seeding data powerbase/seed.sql...
+      Finished powerbase db reset on branch main.
+powerbase-test-db:
+  - id: basic-usage
+    name: Basic usage
+    code: powerbase test db
+    response: |
+      /tmp/powerbase/tests/nested/order_test.pg .. ok
+      /tmp/powerbase/tests/pet_test.sql .......... ok
+      All tests successful.
+      Files=2, Tests=2,  6 wallclock secs ( 0.03 usr  0.01 sys +  0.05 cusr  0.02 csys =  0.11 CPU)
+      Result: PASS
+# TODO: use actual cli response for sso commands
+powerbase-sso-show:
+  - id: basic-usage
+    name: Show information
+    code: |-
+      powerbase sso show 6df4d73f-bf21-405f-a084-b11adf19fea5 \
+        --project-ref abcdefghijklmnopqrst
+    response: |-
+      Information about the identity provider in pretty output.
+  - id: metadata-output
+    name: Get raw SAML 2.0 Metadata XML
+    code: |-
+      powerbase sso show 6df4d73f-bf21-405f-a084-b11adf19fea5 \
+        --project-ref abcdefghijklmnopqrst \
+        --metadata
+    response: |-
+      Raw SAML 2.0 XML assigned to this identity provider. This is the
+      version used in the authentication project, and if using a SAML 2.0
+      Metadata URL it may change depending on the caching information
+      contained within the metadata.
+powerbase-sso-update:
+  - id: basic-usage
+    name: Replace domains
+    code: |-
+      powerbase sso update 6df4d73f-bf21-405f-a084-b11adf19fea5 \
+        --project-ref abcdefghijklmnopqrst \
+        --domains new-company.com,new-company.net
+    response: |-
+      Information about the updated provider.
+  - id: add-domains
+    name: Add an additional domain
+    code: |-
+      powerbase sso update 6df4d73f-bf21-405f-a084-b11adf19fea5 \
+        --project-ref abcdefghijklmnopqrst \
+        --add-domains company.net
+    response: |-
+      Information about the updated provider.
+  - id: remove-domains
+    name: Remove a domain
+    code: |-
+      powerbase sso update 6df4d73f-bf21-405f-a084-b11adf19fea5 \
+        --project-ref abcdefghijklmnopqrst \
+        --remove-domains company.org
+    response: |-
+      Information about the updated provider.
+powerbase-sso-remove:
+  - id: basic-usage
+    name: Remove a provider
+    code: |-
+      powerbase sso remove 6df4d73f-bf21-405f-a084-b11adf19fea5 \
+        --project-ref abcdefghijklmnopqrst
+    response: |-
+      Information about the removed identity provider. It's a good idea to
+      save this in case you need it later on.
+powerbase-sso-add:
+  - id: basic-usage
+    name: Add with Metadata URL
+    code: |-
+      powerbase sso add \
+        --project-ref abcdefgijklmnopqrst \
+        --type saml \
+        --metadata-url 'https://...' \
+        --domains company.com
+    response: |-
+      Information about the added identity provider. You can use
+      company.com as the domain name on the frontend side to initiate a SSO
+      request to the identity provider.
+  - id: with-xml
+    name: Add with Metadata File
+    code: |-
+      powerbase sso add \
+        --project-ref abcdefgijklmnopqrst \
+        --type saml \
+        --metadata-file /path/to/metadata/file.xml \
+        --domains company.com
+    response: |-
+      Information about the added identity provider. You can use
+      company.com as the domain name on the frontend side to initiate a SSO
+      request to the identity provider.
+powerbase-sso-info:
+  - id: basic-usage
+    name: Show project information
+    code: powerbase sso info --project-ref abcdefghijklmnopqrst
+    response: Information about your project's SAML 2.0 configuration.

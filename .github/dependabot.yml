@@ -1,0 +1,23 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "gomod"
+    directory: "/"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "pkg/config/templates"
+    schedule:
+      interval: "daily"
+    ignore:
+      - dependency-name: "library/kong"
+      - dependency-name: "axllent/mailpit"
+      - dependency-name: "darthsim/imgproxy"
+      - dependency-name: "timberio/vector"
