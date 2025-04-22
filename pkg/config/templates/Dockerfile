@@ -3,7 +3,7 @@ FROM powerbase/postgres:15.8.1.060 AS pg15
 # Append to ServiceImages when adding new dependencies below
 FROM library/kong:2.8.1 AS kong
 FROM axllent/mailpit:v1.22.3 AS mailpit
-FROM postgrest/postgrest:v12.2.8 AS postgrest
+FROM postgrest/postgrest:v12.2.11 AS postgrest
 FROM powerbase/postgres-meta:v0.87.1 AS pgmeta
 FROM powerbase/studio:20250317-6955350 AS studio
 FROM darthsim/imgproxy:v3.8.0 AS imgproxy
