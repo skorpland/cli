@@ -14,7 +14,7 @@ jobs:
     outputs:
       release_tag: ${{ steps.prerelease.outputs.tagName }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - id: prerelease
         run: |
           gh release list --limit 1 --json tagName --jq \
@@ -27,7 +27,7 @@ jobs:
       - settings
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
@@ -49,7 +49,7 @@ jobs:
     name: Bump self-hosted versions
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
@@ -65,7 +65,7 @@ jobs:
       - publish
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
@@ -81,7 +81,7 @@ jobs:
       - settings
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
